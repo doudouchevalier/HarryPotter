@@ -1,5 +1,5 @@
-async function getHouses(){
-    let houses = document.querySelector('.houses');
+async function GetCharacters(){
+    let houses = document.querySelector('main ');
     houses.innerHTML =
     <div><img src='../logo/Gryffindor.png'/></div>
 }
