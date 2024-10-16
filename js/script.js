@@ -1,38 +1,39 @@
-const adresseAPI = `https://hp-api.onrender.com/api/characters`
+const adresseAPI = `https://hp-api.onrender.com/api/characters`;
+let allCharacters = []; // Variable globale pour stocker les personnages récupérés
 
 // Récupère et affiche les 12 premiers personnages
 async function getAllCharacters() {
     try {
         const response = await fetch(adresseAPI);
-        const characters = await response.json(); // Convertir la réponse en JSON
-        const AllCharacters = characters.slice(0, 12); // Récupérer les 12 premiers personnages
-        displayCharacters(AllCharacters);
+        allCharacters = await response.json(); // Convertir la réponse en JSON et stocker dans la variable globale
+        const initialCharacters = allCharacters.slice(0, 12); // Récupérer les 12 premiers personnages
+        displayCharacters(initialCharacters);
     } catch (error) {
         console.error("Erreur lors de la récupération des personnages :", error);
     }
 }
 
-async function displayCharacters(characters) {
-
-    const personnages = await fetch(adresseAPI)
-    .then(response => response.json())
-    .catch(error => alert("Erreur : " + error));
+// Fonction pour afficher les personnages dans la section Characters
+function displayCharacters(characters) {
     let characterSection = document.querySelector('main section .characters');
+    characterSection.innerHTML = ''; // Vider la section avant d'ajouter les nouveaux personnages
 
-    for (const perso of characters){
+    for (const perso of characters) {
         const figure = document.createElement('figure');
-                figure.classList.add('perso__left');
-                const img = document.createElement('img');
-                img.src = perso.image; // URL de l'image du personnage
-                img.alt = perso.name;
-                const figcaption = document.createElement('figcaption');
-                figcaption.textContent = perso.name;
-                figure.appendChild(img);
-                figure.appendChild(figcaption);
-                console.log(perso.name);
-                characterSection.appendChild(figure)
-            }
+        figure.classList.add('perso__left');
+        
+        const img = document.createElement('img');
+        img.src = perso.image; // URL de l'image du personnage
+        img.alt = perso.name;
+
+        const figcaption = document.createElement('figcaption');
+        figcaption.textContent = perso.name;
+
+        figure.appendChild(img);
+        figure.appendChild(figcaption);
+        characterSection.appendChild(figure);
     }
+}
 
 // Fonction pour gérer le clic sur les maisons
 function handleHouseClick() {
@@ -43,8 +44,10 @@ function handleHouseClick() {
             const houseName = event.currentTarget.id; // Utiliser event.currentTarget.id pour obtenir l'ID de la maison
             console.log('Maison sélectionnée:', houseName);
 
-            // Filtrer les personnages selon la maison sélectionnée
-            fetchHarryPotterCharacters(houseName); // Appeler la fonction de filtrage avec le nom de la maison
+            // Filtrer les personnages selon la maison sélectionnée à partir des personnages présélectionnés
+            const filteredCharacters = allCharacters.filter(character => character.house === houseName);
+            fetchHarryPotterCharacters(houseName);
+            //displayCharacters(filteredCharacters); // Appeler la fonction pour afficher les personnages filtrés
         });
     });
 }
@@ -57,8 +60,8 @@ async function fetchHarryPotterCharacters(house = '') {
 
         // Si une maison est sélectionnée, filtrer les personnages par maison
         const filteredCharacters = house 
-            ? characters.filter(character => character.house === house)
-            : characters;
+            ? characters.filter(allCharacters => allCharacters.house === house)
+            : allCharacters;
 
         displayCharacters(filteredCharacters); // Appeler la fonction pour afficher les personnages
     } catch (error) {
@@ -68,3 +71,4 @@ async function fetchHarryPotterCharacters(house = '') {
 
 //GetAllCharacters();
 getAllCharacters();
+handleHouseClick();
