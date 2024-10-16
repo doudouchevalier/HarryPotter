@@ -32,6 +32,7 @@ function displayCharacters(characters) {
         const img = document.createElement('img');
         img.src = perso.image; // URL de l'image du personnage
         img.alt = perso.name;
+        figure.id = perso.id;
 
         const figcaption = document.createElement('figcaption');
         figcaption.textContent = perso.name;
@@ -39,6 +40,7 @@ function displayCharacters(characters) {
         figure.appendChild(img);
         figure.appendChild(figcaption);
         characterSection.appendChild(figure);
+        ajoutLienDetails();
     }
 }
 
@@ -76,7 +78,17 @@ async function fetchHarryPotterCharacters(house = '') {
     }
 }
 
+function ajoutLienDetails (){
+    let personnages = document.querySelectorAll('.characters .perso__left')
+    console.log(personnages);
+    personnages.forEach(perso => {
+        perso.addEventListener('click', function(event){
+            window.location.href = "details.html?id=" + event.currentTarget.id;
+        })
+});
+}
 //GetAllCharacters();
 //allCharacters = getAllCharacters();
 displayCharacters(allCharacters);
 handleHouseClick();
+ajoutLienDetails();
