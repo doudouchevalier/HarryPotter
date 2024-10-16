@@ -32,7 +32,7 @@ async function GetDetails(identifiant){
             </div>
           </section>
           <section class="house__perso">
-            <img src="./images/logo/Gryffindor.png" alt="" srcset="" />
+            <img src="./images/logo/${perso.house}.png" alt="" srcset="" />
           </section>
         `
       }
