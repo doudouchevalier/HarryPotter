@@ -1,13 +1,20 @@
 const adresseAPI = `https://hp-api.onrender.com/api/characters`;
 let allCharacters = []; // Variable globale pour stocker les personnages récupérés
-
+try {
+    const response = await fetch(adresseAPI);
+    allCharacters = await response.json(); // Convertir la réponse en JSON et stocker dans la variable globale
+    allCharacters = allCharacters.slice(0, 12); // Récupérer les 12 premiers personnages
+} catch (error) {
+    console.error("Erreur lors de la récupération des personnages :", error);
+}
 // Récupère et affiche les 12 premiers personnages
 async function getAllCharacters() {
     try {
         const response = await fetch(adresseAPI);
         allCharacters = await response.json(); // Convertir la réponse en JSON et stocker dans la variable globale
         const initialCharacters = allCharacters.slice(0, 12); // Récupérer les 12 premiers personnages
-        displayCharacters(initialCharacters);
+        console.log("test" + initialCharacters);
+        return initialCharacters;
     } catch (error) {
         console.error("Erreur lors de la récupération des personnages :", error);
     }
@@ -60,7 +67,7 @@ async function fetchHarryPotterCharacters(house = '') {
 
         // Si une maison est sélectionnée, filtrer les personnages par maison
         const filteredCharacters = house 
-            ? characters.filter(allCharacters => allCharacters.house === house)
+            ? allCharacters.filter(allCharacters => allCharacters.house === house)
             : allCharacters;
 
         displayCharacters(filteredCharacters); // Appeler la fonction pour afficher les personnages
@@ -70,5 +77,6 @@ async function fetchHarryPotterCharacters(house = '') {
 }
 
 //GetAllCharacters();
-getAllCharacters();
+//allCharacters = getAllCharacters();
+displayCharacters(allCharacters);
 handleHouseClick();
